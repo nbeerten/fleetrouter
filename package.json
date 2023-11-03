@@ -1,0 +1,31 @@
+{
+    "name": "@nbeerten/fleetrouter",
+    "version": "1.0.0",
+    "description": "An ultra-minimal router designed for fleet-footed server-side routing on the edge",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsup ./src"
+    },
+    "keywords": [],
+    "author": "nbeerten",
+    "license": "MIT",
+    "devDependencies": {
+        "tsup": "^7.2.0",
+        "typescript": "^5.2.2"
+    },
+    "files": [
+        "dist",
+        "package.json"
+    ],
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "types": "./dist/index.d.mts"
+        }
+    },
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "dependencies": {
+        "urlpattern-polyfill": "^9.0.0"
+    }
+}
