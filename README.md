@@ -7,7 +7,7 @@ Fleetrouter is an ultra-minimal router designed for fleet-footed server-side rou
 
 ## Installation
 
-You can install FleetRouter using NPM. Run the following command:
+You can install Fleetrouter using NPM. Run the following command:
 
 ```sh
 pnpm add @nbeerten/fleetrouter
