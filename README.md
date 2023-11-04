@@ -30,6 +30,15 @@ Router.add("GET", "/", () => {
     return new Response("Hello World!");
 });
 
+// You can also use URLPattern have parameters in the URL. For improved
+// usability, this package doesns't return the usual output
+// of `URLPatternResult` but instead returns an object with the parameters
+// of only the path as a `Record<string, string>`. If you do need 
+// the full `URLPatternResult` you can use the `rawParams` property.
+Router.add("GET", "/path/:id", ({ params }) => {
+    return new Response(`Path ${params.id} is awesome!`);
+});
+
 Router.add("*", "/*", () => {
     return new Response("Fallback response");
 });
