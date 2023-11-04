@@ -15,6 +15,8 @@ pnpm add @nbeerten/fleetrouter
 
 ## Usage
 
+> [!NOTE]
+> This example works on Cloudflare Workers. Other runtimes have different ways of exporting the router.
 ```ts
 import { FleetRouter } from "@nbeerten/fleetrouter";
 
@@ -36,11 +38,16 @@ export default Router;
 
 Routes are evaluated in the order they are added, so a fallback route should always be added last. The first route that matches a request's method and path will be returned.
 
-Exporting the router like in the example is only possible in runtimes like Cloudflare Workers or Vercel Edge Functions, where the default export of the entrypoint is an object, containing a fetch function. If you want to add other handlers, like scheduled handlers on cloudflare workers, use the following:
+### Other runtimes
+
+Depending on the runtime you need to export something else. Usually it's as simple as exporting the `Router.fetch` function as a default export, but sometimes you may need to export a function that calls the `Router.fetch` function.
 
 ```ts
-export default {
-    fetch: Router.fetch,
-    scheduled: () => { ... }
+export default Router.fetch;
+
+// Or
+
+export default (request: Request, context: Context) => {
+    return Router.fetch(request, {}, context);
 }
 ```
