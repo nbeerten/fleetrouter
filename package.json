@@ -1,6 +1,6 @@
 {
     "name": "@nbeerten/fleetrouter",
-    "version": "1.0.2",
+    "version": "1.0.2", 
     "description": "An ultra-minimal router designed for fleet-footed server-side routing on the edge",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",

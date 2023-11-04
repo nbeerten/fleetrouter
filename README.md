@@ -17,6 +17,7 @@ pnpm add @nbeerten/fleetrouter
 
 > [!NOTE]
 > This example works on Cloudflare Workers. Other runtimes have different ways of exporting the router.
+
 ```ts
 import { FleetRouter } from "@nbeerten/fleetrouter";
 
