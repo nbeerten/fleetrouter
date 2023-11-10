@@ -10,12 +10,23 @@ export class FleetRouter<Req extends Request = Request, Env extends object = {},
         });
     }
 
-    protected routes: { pattern: string, handler: Handler<Req, Env, Ctx, any>, method: "*" | HttpMethod }[] = [];
+    protected routes: { pattern: URLPattern, handler: Handler<Req, Env, Ctx, any>, method: "*" | HttpMethod }[] = [];
 
-    public add<Pattern extends string>(method: HttpMethod, pattern: Pattern extends string ? Pattern : never, handler: Handler<Req, Env, Ctx, Params<Pattern>>): this;
-    public add(method: HttpMethod, pattern: URLPattern, handler: Handler<Req, Env, Ctx, unknown>): this;
-    public add<Pattern extends string>(method: HttpMethod | "*", pattern: Pattern, handler: Handler<Req, Env, Ctx, Params<Pattern>>): this {
-        this.routes.push({ pattern, handler, method });
+    public add<Pattern extends string>(method: HttpMethod | "*", pattern: Pattern extends string ? Pattern : never, handler: Handler<Req, Env, Ctx, Params<Pattern>>): this {
+        this.routes.push({ 
+            pattern: new URLPattern({
+                protocol: '*',
+                username: '*',
+                password: '*',
+                hostname: '*',
+                port: '*',
+                pathname: pattern,
+                search: '*',
+                hash: '*',
+            }), 
+            handler, 
+            method 
+        });
 
         return this;
     }
@@ -23,17 +34,18 @@ export class FleetRouter<Req extends Request = Request, Env extends object = {},
     public async fetch(request: Req, env: Env = {} as Env, ctx: Ctx = {} as Ctx): Promise<Response> {
         try {
             const requestMethod = request.method.toUpperCase() as HttpMethod;
-            const filteredRoutes = this.routes.filter(route => route.method === "*" || route.method === requestMethod);
+            const filteredRoutes = this.routes.filter(({ method }) => method === "*" || method === requestMethod);
+
+            const requestUrl = new URL(request.url);
 
             for (const route of filteredRoutes) {
                 const { pattern, handler } = route;
-                const routePattern = new URLPattern(pattern, request.url);
 
-                if (routePattern.test(request.url)) {
-                    const rawParams = routePattern.exec(request.url);
+                if (pattern.test(requestUrl)) {
+                    const rawParams = pattern.exec({ pathname: requestUrl.pathname });
                     const params = rawParams?.pathname.groups;
                     
-                    return params ? handler({ request, env, ctx, params, rawParams }) : handler({ request, env, ctx, params: {} });
+                    return params ? handler({ request, env, ctx, params }) : handler({ request, env, ctx, params: {} });
                 }
             }
 
@@ -56,7 +68,7 @@ export type Handler<
     Env extends object = {}, 
     Ctx extends object = {},
     Params extends (object | unknown) = {}
-> = ({ request, env, ctx, params }: { request: RequestType, env: Env, ctx: Ctx, params: Params, rawParams?: URLPatternResult }) => Promise<Response> | Response;
+> = ({ request, env, ctx, params }: { request: RequestType, env: Env, ctx: Ctx, params: Params }) => Promise<Response> | Response;
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS" | {};
 
 // Much is taken from the Hono router.

@@ -1,9 +1,11 @@
 # Fleetrouter
 
-Fleetrouter is an ultra-minimal router designed for fleet-footed server-side routing on the edge, fully based on web standards like [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request), [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) and [URLPattern](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern).
+> [!WARNING]
+> This router is slow. This is a limitation of the URLPattern API. From my testing ([benchmarks/fetch.js](https://github.com/nbeerten/fleetrouter/tree/main/benchmarks), similar benchmark suite to what Hono is using) I can see this router is able to handle about **22,000 requests per second**.
+> Hono is able to achieve above **250,000 requests per second**. Don't use this if you want performance.
+> The goal is to string together as much Web APIs as possible, not to be fast or good or usable in production.
 
-> [!IMPORTANT]  
-> This is an experimental side project and is not made or intended for production use.
+Fleetrouter is an ultra-minimal router designed for fleet-footed server-side routing on the edge, fully based on web standards like [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request), [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) and [URLPattern](https://developer.mozilla.org/en-US/docs/Web/API/URLPattern).
 
 ## Installation
 
